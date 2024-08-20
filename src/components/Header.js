@@ -4,20 +4,30 @@ import { BsSearch, BsMinecart } from "react-icons/bs";
 import { AiOutlineHeart, AiOutlineUser } from "react-icons/ai";
 import { BiGitCompare } from "react-icons/bi";
 import { MdRestaurantMenu } from "react-icons/md";
+import { IoLogOutOutline } from "react-icons/io5";
+import { IoIosLogOut } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { GoChecklist } from "react-icons/go";
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
+import { getCategory, getAllProducts } from "../features/products/productSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
   const cartState = useSelector((state) => state?.auth?.cartProducts);
   const userState = useSelector((state) => state?.auth?.user);
   const productState = useSelector((state) => state?.product?.product);
+  const categoryState = useSelector((state) => state?.product?.category);
   const [productOpt, setProductOpt] = useState([]);
   const [total, setTotal] = useState(null);
   const [paginate, setPaginate] = useState(true);
   const navigate = useNavigate();
+
+  //category
+  useEffect(() => {
+    dispatch(getCategory());
+  }, []);
+
   useEffect(() => {
     let sum = 0;
     for (let index = 0; index < cartState?.length; index++) {
@@ -36,6 +46,19 @@ const Header = () => {
     }
     setProductOpt(data);
   }, [productState]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  console.log(searchQuery);
+  const handleSearch = () => {
+    if (searchQuery !== "") {
+      const url = `/product/search/${searchQuery}`;
+      navigate(url);
+    }
+  };
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
   return (
     <>
       <header className="header-top py-2 px-5">
@@ -46,7 +69,7 @@ const Header = () => {
             </div>
             <div className="col-6">
               <p className="text-end  mb-0">
-                Hotline:{" "}
+                (B) Hotline:
                 <a className="" href="tel: 1900 8088">
                   1900 8088
                 </a>
@@ -66,15 +89,21 @@ const Header = () => {
               </h2>
             </div>
             <div className="col-6">
-              <div className="input-group">
-                {/* <input
+              <div className="input-group" style={{ cursor: "pointer" }}>
+                <input
                   type="text"
                   className="form-control p-3"
                   placeholder="Search product here"
                   aria-label="Search product "
                   aria-describedby="basic-addon2"
-                /> */}
-                <Typeahead
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      handleSearch();
+                    }
+                  }}
+                />
+                {/* <Typeahead
                   id="pagination-example"
                   onPaginate={() => console.log("Results paginated")}
                   onChange={(selected) => {
@@ -94,8 +123,12 @@ const Header = () => {
                   placeholder="Search product here..."
                   className="typeahead"
                   minLength={2}
-                />
-                <span className="input-group-text d-flex " id="basic-addon2">
+                /> */}
+                <span
+                  onClick={handleSearch} // Pass the reference to the function without invoking it
+                  className="input-group-text d-flex "
+                  id="basic-addon2"
+                >
                   <BsSearch className="search-icon fs-5 w-100" />
                 </span>
               </div>
@@ -104,7 +137,7 @@ const Header = () => {
               <div className="menu-links">
                 <div className="d-flex align-items-center justify-content-between px-4  gap-15">
                   <NavLink to="/">Home</NavLink>
-                  <NavLink to="/product">Our Store</NavLink>
+                  <NavLink to="/product">Shop</NavLink>
                   <NavLink to="/blogs">Blogs</NavLink>
                   <NavLink to="/contact">Contact</NavLink>
                 </div>
@@ -137,46 +170,17 @@ const Header = () => {
                       className="dropdown-menu"
                       aria-labelledby="dropdownMenuButton1"
                     >
-                      <li>
-                        <Link className="dropdown-item " to="">
-                          Meat and Poultry
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item " to="">
-                          Dairy and Eggs
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item " to="">
-                          Grains and Cereals
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item " to="">
-                          Fruits and Vegetables
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item " to="">
-                          Sweets and Desserts
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item " to="">
-                          Drinks
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item " to="">
-                          Canned and Baked Food
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item " to="">
-                          Cooking Oils
-                        </Link>
-                      </li>
+                      {categoryState &&
+                        categoryState.map((item, index) => (
+                          <li key={index}>
+                            <Link
+                              className="dropdown-item "
+                              to={`/product?category=${item.title}`}
+                            >
+                              {item.title}
+                            </Link>
+                          </li>
+                        ))}
                     </ul>
                   </div>
                 </div>
@@ -184,7 +188,7 @@ const Header = () => {
             </div>
             <div className="col-9">
               <div className="header-middle-links d-flex align-items-center justify-content-between">
-                <div>
+                {/* <div>
                   <Link
                     to="/compare-product"
                     className="d-flex align-items-center gap-10 "
@@ -196,8 +200,8 @@ const Header = () => {
                       Product
                     </p>
                   </Link>
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <Link
                     to="/wishlist"
                     className="d-flex align-items-center gap-10 "
@@ -209,15 +213,15 @@ const Header = () => {
                       Wishlist
                     </p>
                   </Link>
-                </div>
+                </div> */}
                 <div>
                   <Link
-                    to="/login"
+                    to={userState ? "/profile" : "/login"}
                     className="d-flex align-items-center gap-10 "
                   >
                     <AiOutlineUser size={"2em"} />
                     <p className="mb-0">
-                      {userState ? "Hi " + userState.firstname : "Log In"}{" "}
+                      {userState ? "Welcome " + userState.firstname : "Log In"}
                       <br />
                       My Account
                     </p>
@@ -249,6 +253,19 @@ const Header = () => {
                       History
                     </p>
                   </Link>
+                </div>
+                <div>
+                  <button
+                    onClick={handleLogout}
+                    className="logout-btn d-flex align-items-center gap-10 "
+                  >
+                    <IoIosLogOut size={"2em"} />
+                    <p className="mb-0 ">
+                      Log
+                      <br />
+                      Out
+                    </p>
+                  </button>
                 </div>
               </div>
             </div>

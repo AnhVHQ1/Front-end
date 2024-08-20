@@ -12,7 +12,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAProduct, getAllProducts } from "../features/products/productSlice";
 import { toast } from "react-toastify";
-import { addProductToCart, getUserCart } from "../features/user/userSlice";
+import {
+  addProductToCart,
+  getUserCart,
+  deleteProductCart,
+} from "../features/user/userSlice";
+import { MdDelete } from "react-icons/md";
 
 const SingleProduct = () => {
   useEffect(() => {
@@ -80,6 +85,8 @@ const SingleProduct = () => {
     return shuffledArray;
   };
   const uploadCart = () => {
+    console.log("id: " + productState?._id);
+    console.log("quantity: " + quantity);
     dispatch(
       addProductToCart({
         productId: productState?._id,
@@ -87,26 +94,48 @@ const SingleProduct = () => {
       })
     );
   };
-  const props = {
-    width: 400,
-    height: 500,
-    zoomWidth: 200,
-    img: productState?.images[0]?.url
-      ? productState?.images[0]?.url
-      : "https://climate.onep.go.th/wp-content/uploads/2020/01/default-image.jpg",
-  };
+  // const props = {
+  //   width: 400,
+  //   height: 500,
+  //   zoomWidth: 200,
+  //   img: productState?.images[0]?.url
+  //     ? productState?.images[0]?.url
+  //     : "https://climate.onep.go.th/wp-content/uploads/2020/01/default-image.jpg",
+  // };
   const [orderedProduct, setOrderedProduct] = useState(true);
+
+  // Delete Cart Item
+  const deleteACartProduct = (id) => {
+    dispatch(deleteProductCart(id));
+    setTimeout(() => {
+      dispatch(getUserCart());
+    }, 200);
+  };
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location.pathname]);
+
+    
   return (
     <>
-      <Meta title={"Product Name"} />
-      <BreadCrumb title="Product Name" />
+      <Meta title={productState?.title} />
+      <BreadCrumb title={productState?.title} />
       <div className="main-product-wrapper py-5 home-wrapper-2">
         <div className="container-xxl">
           <div className="row">
             <div className="col-6">
               <div className="main-product-image">
                 <div>
-                  <ReactImageZoom {...props} />
+                  {/* <ReactImageZoom {...props} /> */}
+                  <img
+                    src={
+                      productState?.images[0]?.url
+                        ? productState?.images[0]?.url
+                        : "https://climate.onep.go.th/wp-content/uploads/2020/01/default-image.jpg"
+                    }
+                    alt=""
+                  />
                 </div>
               </div>
               <div className="other-images d-flex flex-wrap gap-15">
@@ -177,10 +206,10 @@ const SingleProduct = () => {
                       }}
                     ></p>
                   </div>
-                  <div className="d-flex align-items-center gap-10 mb-2">
+                  {/* <div className="d-flex align-items-center gap-10 mb-2">
                     <h3 className="detail-header">Tag:</h3>
                     <p className="detail"></p>
-                  </div>
+                  </div> */}
                   <div className="d-flex align-items-center gap-10 mb-2">
                     <h3 className="detail-header">Available:</h3>
                     <p className="detail">{productState?.quantity}</p>
@@ -208,7 +237,7 @@ const SingleProduct = () => {
                           <input
                             type="number"
                             min={1}
-                            max={10}
+                            max={100}
                             defaultValue={1}
                             className="form-control"
                             style={{ width: "50px" }}
@@ -248,15 +277,28 @@ const SingleProduct = () => {
                     </div>
                   </div>
                   <div className="d-flex align-items-center gap-30 my-4">
-                    <div>
+                    {/* <div>
                       <a className="d-flex align-items-center gap-10" href="">
                         <BiGitCompare size={"1.5em"} /> Add to Compare
                       </a>
-                    </div>
-                    <div>
+                    </div> */}
+                    {/* <div>
                       <a className="d-flex align-items-center gap-10" href="">
                         <AiOutlineHeart size={"1.5em"} /> Add to Wishlist
                       </a>
+                    </div> */}
+                    <div className="delete-btn d-flex align-items-center gap-10">
+                      {/* <MdDelete
+                        size={"1.5em"}
+                        
+                        className="delete-product-btn"
+                      /> */}
+                      {/* <p
+                        className="delete-product-btn"
+                        onClick={() => deleteACartProduct(productState?._id)}
+                      >
+                        Delete from cart?
+                      </p> */}
                     </div>
                   </div>
                 </div>
@@ -265,9 +307,9 @@ const SingleProduct = () => {
                     <h3 className="detail-header">Satisfaction Guarantee</h3>
                     <p className="detail">
                       Explore our product details with confidence on our
-                      platform. Rest assured with our Satisfaction
-                      Guarantee, offering easy returns within 30 days for a full
-                      refund or replacement to ensure your contentment.
+                      platform. Rest assured with our Satisfaction Guarantee,
+                      offering easy returns within 30 days for a full refund or
+                      replacement to ensure your contentment.
                     </p>
                   </div>
                 </div>

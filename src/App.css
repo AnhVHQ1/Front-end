@@ -152,6 +152,11 @@ a{
 .typeahead a {
   color: var(--color-4);
 }
+.logout-btn{
+  border: none;
+  background-color: transparent;
+  color: var(--color-3);
+}
 /*End header*/
 
 /* Footer */
@@ -315,6 +320,18 @@ footer .input-group-text{
 .categories>div:nth-child(4){
   border-bottom: 1px solid rgba(139, 139, 139, 0.533);
 }
+.explore-btn{
+  cursor: pointer;
+  font-size: 14px;
+  padding: 7px 20px;
+  color:black;
+  background-color: white;
+  border-radius: 25px;
+}
+.explore-btn:hover{
+  background-color: var(--color-2);
+  color:white;
+}
 /* Marquee */
 .marquee img{
   height: 60px;
@@ -406,9 +423,8 @@ footer .input-group-text{
 }
 .product-image img{
   padding: 0 25px;
-  height: 50vh!important;
-  width: 50vh;
-  object-fit: cover;
+  height: 30vh;
+  object-fit:cover;
 }
 
 .product-card .product-details h6{
@@ -429,6 +445,13 @@ footer .input-group-text{
   font-weight: bold;
   font-size: 16px;
 }
+.no-product-data{
+  font-size: 14px;
+  /* font-weight: bold; */
+  color: gray; 
+  text-align: center;
+  padding: 5px 10px;
+}
 /* .product-card .product-image>img:last-child{
   display: none;
 }
@@ -448,7 +471,6 @@ footer .input-group-text{
 
 a.product-card.position-relative.mb-0{
   height: 100%;
-
 }
 .product-details{
   display: flex;
@@ -463,30 +485,74 @@ a.product-card.position-relative.mb-0{
 .heart-icon{
   color: #E31B23!important;
 }
-/* End product card */
+.traffic-light-mini{
+  display: flex;
+  flex-direction: row;
 
+}
+/* End product card */
+.product-grid-6 img{
+  height: 30vh!important;
+  object-fit: contain!important;
+}
+.product-grid-12 {
+  display: flex;
+  flex-direction: row;
+}
+.product-grid-12 .product-image{
+  width: 40%;
+}
+.product-grid-12 .product-details{
+  width: 60%;
+}
+.product-grid-12 img{
+  height:100%!important;
+  max-height: 70vh;
+  width:100%!important;
+  object-fit: scale-down!important;
+}
 .mini-traffic-light{
   padding: 5px;
   margin: 2px;
   border-radius: 20px;
   color: white;
 }
+.energy-light, .saturates-light{
+  width: 20%;
+}
+.fat-light{
+  width: 16%;
+}
+.saturates-light {
+  width: 16%;
+}
+.sugar-light {
+  width: 17%;
+}
+.salt-light {
+  width: 17%;
+}
 .mini-label{
   font-weight: 500;
+  margin-bottom: 0;
+  font-size: 10px;
 }
 .mini-ri-percentage{
   background-color: #fff;
   border-radius: 30px;
 }
+.mini-amount{
+  margin: 3px 0;
+}
 .energy-light{
   background-color: #fff;
-  border: 2px solid black;
+  border: 1.5px solid black;
 }
 .energy-light p{
   color: black !important;
 }
 .energy-light .mini-ri-percentage{
-  border: 2px solid black;
+  border: 1.5px solid black;
   padding-bottom: 0px;
 }
 .calories-light .percentage{
@@ -539,7 +605,7 @@ a.product-card.position-relative.mb-0{
   list-style-type: none;
   font-size: 12px;
   line-height: 30px;
-  color: black;
+  color: var(--color-4);
   cursor: pointer;
 }
 .sub-title{
@@ -569,6 +635,39 @@ a.product-card.position-relative.mb-0{
   padding: 10px;
   background-color: #fff;
   border-radius: 10px;
+}
+/* .rc-slider-mark-text{
+  font-weight: bold;
+} */
+.rc-slider-mark-text:nth-child(1) {
+  background-color: white;
+    color: black;
+    padding: 0px 12px;
+    border-radius: 50px;
+    border: 1.5px solid black;
+}
+/* Change color of the second tag */
+.rc-slider-mark-text:nth-child(2) {
+  background-color: #76b729;
+  color: white;
+  padding: 1px 14px;
+  border-radius: 50px;
+}
+
+/* Change color of the third tag */
+.rc-slider-mark-text:nth-child(3) {
+  background-color: #FFBF00;
+  color: white;
+  padding: 1px 8px;
+  border-radius: 50px;
+}
+
+/* Change color of the fourth tag */
+.rc-slider-mark-text:nth-child(4) {
+background-color: red;
+  color: white;
+  padding: 1px 10px;
+  border-radius: 50px;
 }
 .grid{
   width: 25px;
@@ -609,6 +708,14 @@ a.product-card.position-relative.mb-0{
 .product-button{
   border: none;
   background-color: transparent;
+}
+.showing-result{
+  font-size: 15px;
+  color: var(--color-3);
+}
+.go-to{
+  color: var(--color-3);
+  font-size: 16px;
 }
 /* End our store */
 
@@ -891,6 +998,13 @@ a.product-card.position-relative.mb-0{
   font-size: 12px;
   color: gray;
 }
+.delete-product-btn{
+  padding-left: 16px;
+  font-size: 12px;
+  color: gray;
+  margin-bottom: 0;
+  text-decoration:underline;
+}
 /* End single product */
 
 /* Cart */
@@ -904,15 +1018,29 @@ a.product-card.position-relative.mb-0{
 .cart-col-1{
   width: 40%;
   margin-left: 40px;
+  color: #212529;
 }
 .cart-col-2{
   width: 10%;
+  text-align: center;
 }
 .cart-col-3{
-  width: 15%;
+  width: 12%;
+  text-align: center!important;
+  font-weight: 500;
 }
+.cart-col-3 p {
+  margin-bottom: 0rem;
+  font-size: 1.25rem !important;
+}
+
 .cart-col-4{
-  width: 15%;
+  width: 10%;
+  text-align: center;
+  
+}
+.cart-col-5 {
+  width: 8%;text-align: center;
 }
 .cart-col-1 p{
   color: gray;
@@ -921,6 +1049,13 @@ a.product-card.position-relative.mb-0{
 .cart-total{
   padding-left: 40px;
   padding-right: 100px;
+}
+.delete-btn{
+  cursor: pointer;
+}
+.cart-quantity{
+  font-size: 14px;
+  margin-bottom: 0;
 }
 /* End Cart */
 
@@ -947,4 +1082,49 @@ a.product-card.position-relative.mb-0{
   font-size: 14px;
   font-weight: 500;
 }
+.checkout-img{
+  width: 68px;
+  height: 68px;
+  object-fit: cover;
+}
 /* End shipping */
+
+/* orders */
+.orders-title{
+  background-color: var(--color-3);
+  padding: 8px 0;
+  color: white;
+  margin-bottom: 10px;
+}
+.orders-detail{
+  background-color: var(--color-3);
+  padding-top: 5px;
+  color: rgb(255, 255, 255);
+  margin-bottom: 10px;
+}
+.orders-detail p{
+    font-size: 13px;
+}
+.order-card{
+  background-color: var(--color-1);
+}
+.order-title{
+  font-weight: bold;
+}
+.total-nutrition{
+  background-color: var(--color-1);
+  margin: 0;
+}
+.total-nutrition p, b{
+  font-size: 13px;
+}
+.no-order{
+  height: 50vh;
+  color:gray;
+  font-size: 13px;
+  text-align:center;
+  vertical-align: middle;
+  padding-top: 100px;
+}
+
+/* end orders */

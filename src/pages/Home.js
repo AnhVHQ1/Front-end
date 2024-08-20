@@ -13,14 +13,29 @@ import { useEffect } from "react";
 import moment from "moment";
 import { getAllBlogs } from "../features/blogs/blogSlice";
 import { getAllProducts } from "../features/products/productSlice";
+import { GoMilestone } from "react-icons/go";
+import { LuMousePointerClick } from "react-icons/lu";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import Meta from "../components/Meta";
 
 const Home = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const shuffleArray = (array) => {
+    const shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [
+        shuffledArray[j],
+        shuffledArray[i],
+      ];
+    }
+    return shuffledArray;
+  };
   const blogState = useSelector((state) => state?.blog?.blog);
   const productState = useSelector((state) => state?.product?.product);
-  const productItem = productState.slice(0, 4);
+   const productItem = shuffleArray(productState).slice(0, 4);
   console.log(productItem);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -36,6 +51,9 @@ const Home = () => {
 
   return (
     <>
+      <Meta
+        title={"Gusteau - Discover nutritious choices for a healthier you"}
+      />  
       <section className="home-wrapper-1">
         <div className="container-xxl row">
           {/* <div className="col-6">
@@ -265,7 +283,7 @@ const Home = () => {
       <section className="home-wrapper-2">
         <div className="container-xxl">
           <div className="row">
-            <div className="categories d-flex justify-content-between align-items-center flex-wrap m-0">
+            {/* <div className="categories d-flex justify-content-between align-items-center flex-wrap m-0">
               <div className="d-flex align-items-center justify-content-between">
                 <div>
                   <h6>Raw Meat</h6>
@@ -322,21 +340,34 @@ const Home = () => {
                 </div>
                 <img src="/images/fruit.jpg" alt="" />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
       <section className="product-wrapper py-5 home-wrapper-2 px-4">
         <div className="container-xxl">
-          <div className="col-12">
+          {/* <div className="col-12">
             <h3 className="section-heading">Products</h3>
+            
+          </div> */}
+          <div className="mb-4 col-12 d-flex justify-content-between align-items-center">
+            <h3 className="section-heading mb-0">Products</h3>
+            <div
+              onClick={() => {
+                window.location.href = "/product";
+              }}
+              className="explore-btn"
+            >
+              Explore More
+              <MdKeyboardDoubleArrowRight size={"1.5em"} className="ms-2" />
+            </div>
           </div>
           <div className="row">
             <ProductCard data={productItem} />
           </div>
         </div>
       </section>
-      <section className="special-product py-5 home-wrapper-2 px-4">
+      {/* <section className="special-product py-5 home-wrapper-2 px-4">
         <div className="container-xxl">
           <div className="row">
             <div className="col-12">
@@ -346,7 +377,7 @@ const Home = () => {
           <div className="row">
             {productState &&
               productState?.map((item, index) => {
-                if (item.tag === "featured") {
+                if ((item?.tag === "popular") && (index < 3)) {
                   return (
                     <SpecialProduct
                       key={index}
@@ -363,7 +394,7 @@ const Home = () => {
               })}
           </div>
         </div>
-      </section>
+      </section> */}
       <section className="marquee py-5">
         <div className="container-xxl">
           <div className="row">

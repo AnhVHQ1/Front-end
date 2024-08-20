@@ -12,6 +12,15 @@ const TrafficLightCard = (props) => {
       return "red";
     }
   };
+  // const getColor = (value, low, high) => {
+  //   if (value <= low) {
+  //     return "#66BB66";
+  //   } else if (value <= high) {
+  //     return "#FFC72C";
+  //   } else {
+  //     return "#FF6666";
+  //   }
+  // };
   return (
     <div className="d-flex w-100 justify-content-between align-self-stretch">
       <div
@@ -25,7 +34,7 @@ const TrafficLightCard = (props) => {
             className="percentage text-center mt-1"
             style={{ backgroundColor: "white", border: "2px solid black" }}
           >
-            1%
+            {((calories / 2000) * 100).toFixed(0)}%
           </p>
         </div>
       </div>
@@ -36,7 +45,9 @@ const TrafficLightCard = (props) => {
         <h5 className="">Fat</h5>
         <p className="nutrition-amount text-center">{fat}g</p>
         <div className="ri-percentage">
-          <p className="percentage text-center">0%</p>
+          <p className="percentage text-center">
+            {((fat / 70) * 100).toFixed(0)}%
+          </p>
         </div>
       </div>
       <div
@@ -46,7 +57,9 @@ const TrafficLightCard = (props) => {
         <h5 className="">Saturates</h5>
         <p className="nutrition-amount text-center">{saturatedFat}g</p>
         <div className="ri-percentage">
-          <p className="percentage text-center">0%</p>
+          <p className="percentage text-center">
+            {((saturatedFat / 20) * 100).toFixed(0)}%
+          </p>
         </div>
       </div>
       <div
@@ -56,7 +69,9 @@ const TrafficLightCard = (props) => {
         <h5 className="">Sugar</h5>
         <p className="nutrition-amount text-center">{sugar}g</p>
         <div className="ri-percentage">
-          <p className="percentage text-center">7%</p>
+          <p className="percentage text-center">
+            {((sugar / 90) * 100).toFixed(0)}%
+          </p>
         </div>
       </div>
       <div
@@ -66,7 +81,9 @@ const TrafficLightCard = (props) => {
         <h5 className="">Salt</h5>
         <p className="nutrition-amount text-center">{salt}g</p>
         <div className="ri-percentage">
-          <p className="percentage text-center">1%</p>
+          <p className="percentage text-center">
+            {((salt / 6) * 100).toFixed(0)}%
+          </p>
         </div>
       </div>
     </div>

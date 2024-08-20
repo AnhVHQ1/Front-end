@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
@@ -12,14 +12,17 @@ const shippingSchema = yup.object({
   district: yup.string(),
   city: yup.string().required("City/Province is required"),
   country: yup.string().required("Country is required"),
-  zipcode: yup.string().required("Zipcode is required"),
+  zipcode: yup.string(),
+  shippingNote: yup.string(),
 });
 
 const Checkout = () => {
   const dispatch = useDispatch();
   const cartState = useSelector((state) => state.auth.cartProducts);
+  const orderState = useSelector((state) => state?.auth?.order);
   const [shippingInfo, setShippingInfo] = useState(null);
-
+  const navigate = useNavigate();
+  const [shippingNote, setShippingNote] = useState("")
   // Calculate total
   const [totalAmount, setTotalAmount] = useState(null);
   useEffect(() => {
@@ -32,6 +35,9 @@ const Checkout = () => {
     }
   }, [cartState]);
 
+  const handleShippingNoteChange = (e) => {
+    setShippingNote(e.target.value); // Update shippingNote state
+  };
   const formik = useFormik({
     initialValues: {
       firstname: "",
@@ -41,6 +47,7 @@ const Checkout = () => {
       city: "",
       country: "",
       zipcode: "",
+      shippingNote:shippingNote,
     },
     validationSchema: shippingSchema,
     onSubmit: (values) => {
@@ -62,18 +69,29 @@ const Checkout = () => {
           country: values.country,
           zipcode: values.zipcode,
         },
-        // Include other fields from the MongoDB model here
-        orderItems: items, // Add order items based on your application logic
-        totalPrice: totalAmount, // Adjust accordingly
-        totalPriceWithShipping: totalAmount + 5, // Adjust accordingly
+        shippingNote: shippingNote,
+        orderItems: items,
+        totalPrice: totalAmount,
+        totalPriceWithShipping: totalAmount + 5,
       };
       if (formik.isValid) {
         // Dispatch the createAnOrder action with the shipping information
-        dispatch(createAnOrder(orderDetail));
+        dispatch(createAnOrder(orderDetail)).then(() => {
+          navigate("/my-orders"); // Navigate to '/my-orders' after successful order creation
+        });
       }
     },
   });
-  useEffect(() => {});
+  // useEffect(() => {});
+  // const { order, isError, isSuccess, isLoading, message } = orderState;
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     navigate("/");
+  //   } else {
+  //     navigate("/my-orders");
+  //   }
+  // }, [order, isError, isSuccess, isLoading]);
+
   return (
     <>
       <div className="checkout-wrapper p-5">
@@ -100,8 +118,8 @@ const Checkout = () => {
                     </li>
                   </ol>
                 </nav>
-                <h4 className="title mt-4">Contact Information</h4>
-                <p className="user-details py-3">aaa (a@a.a) </p>
+                {/* <h4 className="title mt-4">Contact Information</h4>
+                <p className="user-details py-3">aaa (a@a.a) </p> */}
                 <h4 className="title my-4">Shipping Address</h4>
                 <form
                   action=""
@@ -211,6 +229,20 @@ const Checkout = () => {
                       {formik.touched.zipcode && formik.errors.zipcode}
                     </div>
                   </div>
+                  <div className="w-100">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Shipping Note"
+                      name="shippingNote"
+                      value={shippingNote} // Use shippingNote state
+                      onChange={handleShippingNoteChange}
+                    />
+                    <div className="error">
+                      {formik.touched.shippingNote &&
+                        formik.errors.shippingNote}
+                    </div>
+                  </div>
                   <h4 className="title mt-4 mb-0">Shipping Method</h4>
                   <div className="w-100 ">
                     <select className="form-control form-select" id="">
@@ -231,9 +263,6 @@ const Checkout = () => {
                         <IoIosArrowBack className="me-2" />
                         Return to Cart
                       </Link>
-                      <Link className="button" to="/cart">
-                        Continue
-                      </Link>
                       <button type="submit" className="button">
                         Place Order
                       </button>
@@ -251,7 +280,7 @@ const Checkout = () => {
                         key={index}
                         className="d-flex gap-10 align-items-center justify-content-between"
                       >
-                        <div className="w-75 d-flex gap-10">
+                        <div className="w-75 d-flex gap-10 mt-3">
                           <div className="w-25 position-relative">
                             <span
                               style={{ top: "-10px", right: "-7px" }}
@@ -260,8 +289,8 @@ const Checkout = () => {
                               {item?.quantity}
                             </span>
                             <img
-                              style={{ border: "1px solid black" }}
-                              className="img-fluid "
+                              // style={{ border: "1px solid black" }}
+                              className="checkout-img "
                               src={item?.productId?.images[0]?.url}
                               alt="product img"
                             />

@@ -4,9 +4,9 @@ import { productService } from "./productService";
 
 export const getAllProducts = createAsyncThunk(
   "product/get",
-  async (thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      return await productService.getProducts();
+      return await productService.getProducts(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -22,11 +22,31 @@ export const getAProduct = createAsyncThunk(
     }
   }
 );
+export const searchForProduct = createAsyncThunk(
+  "product/searchproduct",
+  async (data, thunkAPI) => {
+    try {
+      return await productService.searchProduct(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const addToWishlist = createAsyncThunk(
   "product/wishlist",
   async (prodId, thunkAPI) => {
     try {
       return await productService.addToWishlist(prodId);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const getCategory = createAsyncThunk(
+  "category/get",
+  async (thunkAPI) => {
+    try {
+      return await productService.getAllCat();
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -87,6 +107,36 @@ export const productSlice = createSlice({
         state.singleproduct = action.payload;
       })
       .addCase(getAProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(searchForProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(searchForProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.search = action.payload;
+      })
+      .addCase(searchForProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(getCategory.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getCategory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.category = action.payload;
+      })
+      .addCase(getCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

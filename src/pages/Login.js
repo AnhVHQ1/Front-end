@@ -31,13 +31,12 @@ const Login = () => {
     },
   });
   const authState = useSelector((state) => state);
-
+  const createdUser = useSelector((state) => state.auth.createdUser);
   const { user, isError, isSuccess, isLoading, message } = authState.auth;
   useEffect(() => {
-    if (isSuccess) {
+    let token = localStorage.getItem("token");
+    if (isSuccess && token) {
       navigate("/");
-    } else {
-      navigate("/login");
     }
   }, [user, isError, isSuccess, isLoading]);
   return (
@@ -84,19 +83,23 @@ const Login = () => {
                     </div>
                   </div>
                   <div>
-                    <Link
+                    {/* <Link
                       className="forgotpassword text-dark"
                       to="/forgot-password"
                     >
                       Forgot Password?
-                    </Link>
+                    </Link> */}
                     <div className="d-flex justify-content-center align-items-center gap-15">
                       <button className="button" type="submit">
                         Login
                       </button>
-                      <Link className="button signup" to="/register">
-                        Sign Up
-                      </Link>
+                      {!createdUser ? (
+                        <Link className="button signup" to="/register">
+                          Sign Up
+                        </Link>
+                      ) : (
+                        <div></div>
+                      )}
                     </div>
                   </div>
                 </form>

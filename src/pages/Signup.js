@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 
-
 const signUpSchema = yup.object({
   firstname: yup.string().required("First name is required"),
   lastname: yup.string().required("Last name is required"),
@@ -55,11 +54,8 @@ const Signup = () => {
   useEffect(() => {
     if (isSuccess) {
       navigate("/login");
-    } else {
-      navigate("/register");
     }
   }, [user, isError, isSuccess, isLoading]);
-
 
   return (
     <>
